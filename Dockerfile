@@ -1,10 +1,11 @@
 FROM ghcr.io/astral-sh/uv:bookworm-slim
 
-# Copy the project into the image
-ADD . /app
+RUN apt-get update && apt-get install -y gcc python3-dev && rm -rf /var/lib/apt/lists/*
 
-# Sync the project into a new environment, asserting the lockfile is up to date
+ADD . /app
 WORKDIR /app
 RUN uv sync --locked
+
+EXPOSE 8082
 
 CMD ["uv", "run", "start_proxy.py"]
